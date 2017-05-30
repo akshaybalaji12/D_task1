@@ -1,5 +1,6 @@
 package com.example.admin.d_task1;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -12,27 +13,23 @@ public class MainActivity extends AppCompatActivity {
     int r=0;
     int b=0;
     int g=0;
-
+    public static final String pref="Mypref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-                ConstraintLayout la = (ConstraintLayout) findViewById(R.id.layout);
-        la.setBackgroundColor(Color.rgb(0,0,0));
-        TextView t1= (TextView) findViewById(R.id.textView4);
-        TextView t2= (TextView) findViewById(R.id.textView5);
-        TextView t3= (TextView) findViewById(R.id.textView6);
-        t1.setTextColor(Color.rgb(255,255,255));
-        t2.setTextColor(Color.rgb(255,255,255));
-        t3.setTextColor(Color.rgb(255,255,255));
+        SharedPreferences save = getApplicationContext().getSharedPreferences(pref,0);
+        r=save.getInt("red",0);
+        g=save.getInt("green",0);
+        b=save.getInt("blue",0);
 
-
-
-    }
+      fn(r,g,b);
+        }
 
     public void fn(int red,int green,int blue)
-    {   ConstraintLayout la = (ConstraintLayout) findViewById(R.id.layout);
+    {   View la = findViewById(R.id.layout);
         la.setBackgroundColor(Color.rgb(red,green,blue));
 
         TextView t1= (TextView) findViewById(R.id.textView4);
@@ -104,5 +101,15 @@ public class MainActivity extends AppCompatActivity {
         b=0;
         g=0;
         fn(r,g,b);
+    }
+    @Override
+    public void onStop(){
+        super.onStop();
+        SharedPreferences save = getSharedPreferences(pref,0);
+        SharedPreferences.Editor editor= save.edit();
+        editor.putInt("red",r);
+        editor.putInt("green",g);
+        editor.putInt("blue",b);
+        editor.commit();
     }
 }
